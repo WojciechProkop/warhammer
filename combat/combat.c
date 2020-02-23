@@ -5,11 +5,20 @@
 #include <malloc.h>
 #include <time.h>
 #include "combat.h"
+
+/*
+	Author: Wojciech Prokop
+	prokopw@mymacewan.ca or wojtek678@hotmail.com
+	
+	Program function: To simulate a round of combat in Warhammer Fantasy Role-Play (4th Ed.)
+	using a computer. The aim is to be as comprehensive as possible.
+ */
+
+
+// Example run:
 // ./a.out -w1 -b2 -s3 -t4 -n5 -a6 -d7 -i8 -p9 -f10 -W11 -B12 -S13 -T14 -N15 -A16 -D17 -I18 -P19 -F20
 
-
-
-
+// What I use:
 
 int main(int argc, char **argv)
 {
@@ -28,19 +37,32 @@ int main(int argc, char **argv)
 	
 	attacker = getOptions(argc, argv, &teamA, &teamB);
 	determineWounds(&teamA, &teamB);
+
 	fightCombat(&teamA, &teamB, attacker);
 }
 
+// Determine the amount of wounds a unit has if none has been specified
 void determineWounds(struct stats *teamA, struct stats *teamB)
 {
 	teamA->W = (teamA->S + teamA->WP + (teamA->T)*2);
 	teamB->W = (teamB->S + teamB->WP + (teamB->T)*2);
 }
+
+// Get a random integer
 int getRandInt(int limit)
 {
 	return rand() % limit +1;
 }
 
+
+/*
+	Main combat section of the code. If the while loop is enabled, then it acts as a 
+	simulator until one side wins.
+	TODO: Make it a do-while loop, so that it is able to work as a one-off function.
+
+	PLEASE DO NOT PUT THIS FUNCTION IN A LOOP UNLESS YOU WANT TO GET A STACK
+	OVERFLOW!
+ */
 void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 {
 	//seed the time
@@ -64,78 +86,108 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	int bCrits = 0;
 	int aFumbls = 0;
 	int bFumbls = 0;
-	if (aSize > bSize)
-		{
-			smallest = bSize;
-			difference = aSize-bSize;
-		}
-	else
-		{
-			smallest = aSize;
-			difference = bSize-aSize;
-		}
-
-	if (attacker == 0)
-		{
-			printf("A is attacking B!\n");
-			hitsRemaining = teamA->units;
-			defenders = teamB->units;
-
-		}
-	else
-		{
-			printf("B is attacking A!\n");
-			hitsRemaining = teamB->units;
-			defenders = teamB->units;
-		}
-	attackers = hitsRemaining;	
-	oldRatio = findRatio(attackers, defenders);
-
-	
-	while ((hitsRemaining != 0) && defenders >0)
-		{
-			aRolls[i] = getRandInt(100);
-			bRolls[i] = getRandInt(100);
-
-			aSL = (teamA->WS - aRolls[i]) / 10;
-			bSL = (teamB->WS - bRolls[i]) / 10;
-			printf("Roll of a: %d  SL of a: %d\n", aRolls[i], aSL);
-			printf("Roll of b: %d  SL of b: %d\n", bRolls[i], bSL);
-			if (attacker == 0)
-				{
-					if (aSL > bSL)
-						{
-							printf("A won by %d SLs\n\n", aSL-bSL);
-							defenders--;
-							killed++;
-						}
-					else
-						printf("A lost by %d SLs\n\n", aSL-bSL);
+	   while (teamA->units > 0 && teamB->units > 0)
+			 {
+				 
+				 if (aSize > bSize)
+					 {
+					smallest = bSize;
+					difference = aSize-bSize;
 				}
 			else
 				{
-					if (bSL > aSL)
+					smallest = aSize;
+					difference = bSize-aSize;
+				}
+			
+			if (attacker == 0)
+				{
+					printf("A is attacking B!\n");
+					hitsRemaining = teamA->units;
+					defenders = teamB->units;
+					
+				}
+			else
+				{
+					printf("B is attacking A!\n");
+					hitsRemaining = teamB->units;
+					defenders = teamB->units;
+				}
+			attackers = hitsRemaining;	
+			oldRatio = findRatio(attackers, defenders);
+			
+			while ((hitsRemaining != 0) && defenders >0)
+				{
+					aRolls[i] = getRandInt(100);
+					bRolls[i] = getRandInt(100);
+					
+					aSL = (teamA->WS - aRolls[i]) / 10;
+					bSL = (teamB->WS - bRolls[i]) / 10;
+					printf("Roll of a: %d  SL of a: %d\n", aRolls[i], aSL);
+					printf("Roll of b: %d  SL of b: %d\n", bRolls[i], bSL);
+					if (attacker == 0)
 						{
-							printf("B won by %d SLs\n\n", bSL-aSL);
-							defenders--;
-							killed++;
+							if (aSL > bSL)
+								{
+									printf("A won by %d SLs\n\n", aSL-bSL);
+									defenders--;
+									killed++;
+								}
+							else
+								printf("A lost by %d SLs\n\n", aSL-bSL);
 						}
 					else
-						printf("B lost by %d SLs\n\n", bSL-aSL);
+						{
+							if (bSL > aSL)
+								{
+									printf("B won by %d SLs\n\n", bSL-aSL);
+									defenders--;
+									killed++;
+								}
+							else
+								printf("B lost by %d SLs\n\n", bSL-aSL);
+						}
+					hitsRemaining--;
 				}
-			hitsRemaining--;
+			
+			newRatio = findRatio(attackers, defenders);
+			if (attacker == 0)
+				{
+					printf("\nCOMBAT REPORT:\nCombat Ratio(A to B)\nAt Start: %s\nAt End:   %s\n\nTeam A killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+				}
+			else
+				printf("\nCOMBAT REPORT:\nCombat Ratio(B to A)\nAt Start: %s\nAt End:   %s\n\nTeam B killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+			
+			
+			if (attacker != 0)
+				{
+					teamB->units -= killed;
+					attacker = 0;
+				}
+			else
+				{
+					teamA->units -= killed;
+					attacker = 1;
+				}
+			killed = 0;
+
+			oldRatio = NULL;
+			newRatio = NULL;
+			sleep(1);
 		}
 
-	newRatio = findRatio(attackers, defenders);
-	if (attacker == 0)
-		{
-			printf("\nCOMBAT REPORT:\nCombat Ratio(A to B)\nAt Start: %s\nAt End:   %s\n\nTeam A killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
-		}
-	else
-		printf("\nCOMBAT REPORT:\nCombat Ratio(B to A)\nAt Start: %s\nAt End:   %s\n\nTeam B killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+		 // Free memory
+		 free(oldRatio);
+		 free(newRatio);
+		 free(aRolls);
+		 free(bRolls);
 
-
-	killed = 0;
+		 // Declare winner
+		 if (attacker == 0)
+			 printf("TEAM B HAS WON THE COMBAT!\n");
+		 else
+			 printf("TEAM A HAS WON THE COMBAT!\n");
+		 
 }
 
 
@@ -168,7 +220,7 @@ char* findRatio(int divident, int divisor)
 				gcd = i;
 		}
 	
-	if (gcd != 0)
+	if (gcd != 0 && minSize > 1)
 		sprintf(output, "%d to %d", divident/gcd, divisor/gcd);
 	else
 		sprintf(output, "%d to %d", divident, divisor);
