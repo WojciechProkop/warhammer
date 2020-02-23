@@ -104,15 +104,15 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 				{
 					printf("A is attacking B!\n");
 					hitsRemaining = teamA->units;
-					defenders = teamB->units;
-					
+					defenders = teamB->units;					
 				}
 			else
 				{
 					printf("B is attacking A!\n");
 					hitsRemaining = teamB->units;
-					defenders = teamB->units;
+					defenders = teamA->units;
 				}
+			
 			attackers = hitsRemaining;	
 			oldRatio = findRatio(attackers, defenders);
 			
@@ -159,15 +159,15 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 				printf("\nCOMBAT REPORT:\nCombat Ratio(B to A)\nAt Start: %s\nAt End:   %s\n\nTeam B killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
 			
 			
-			if (attacker != 0)
+			if (attacker == 0)
 				{
 					teamB->units -= killed;
-					attacker = 0;
+					attacker = 1;
 				}
 			else
 				{
 					teamA->units -= killed;
-					attacker = 1;
+					attacker = 0;
 				}
 			killed = 0;
 
