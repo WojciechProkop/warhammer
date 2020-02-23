@@ -129,10 +129,11 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	newRatio = findRatio(attackers, defenders);
 	if (attacker == 0)
 		{
-			printf("\nCOMBAT REPORT:\nCombat Ratio at Start: %s\nCombat Ratio at End: %s\n Team A to Team B\nTeam A killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+			printf("\nCOMBAT REPORT:\nCombat Ratio(A to B)\nAt Start: %s\nAt End:   %s\n\nTeam A killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
 		}
 	else
-		printf("\nCOMBAT REPORT:\nTeam B killed %d enemy unit(s)\n", killed);
+		printf("\nCOMBAT REPORT:\nCombat Ratio(B to A)\nAt Start: %s\nAt End:   %s\n\nTeam B killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+
 
 	killed = 0;
 }
