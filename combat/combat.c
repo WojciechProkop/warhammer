@@ -50,6 +50,9 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	int bSize = teamB->units;
 	int smallest = 0;
 	int difference = 0;
+	int hitsRemaining = 0;
+	int attackers = 0;
+	int defenders = 0;
 	int *aRolls = calloc(aSize,sizeof(int));
 	int *bRolls = calloc(bSize,sizeof(int));
 	int aSL = 0;
@@ -72,10 +75,19 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 		}
 
 	if (attacker == 0)
-		printf("A is attacking B!\n");
+		{
+			printf("A is attacking B!\n");
+			hitsRemaining = teamA->units;
+			defenders = teamB->units;
+		}
 	else
-		printf("B is attacking A!\n");
-	for (i = 0; i < smallest; i++)
+		{
+			printf("B is attacking A!\n");
+			hitsRemaining = teamB->units;
+			defenders = teamB->units;
+		}
+	attackers = hitsRemaining;
+	while ((hitsRemaining != 0) && defenders >0)
 		{
 			aRolls[i] = getRandInt(100);
 			bRolls[i] = getRandInt(100);
@@ -89,6 +101,7 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 					if (aSL > bSL)
 						{
 							printf("A won by %d SLs\n\n", aSL-bSL);
+							defenders--;
 							killed++;
 						}
 					else
@@ -99,11 +112,13 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 					if (bSL > aSL)
 						{
 							printf("B won by %d SLs\n\n", bSL-aSL);
+							defenders--;
 							killed++;
 						}
 					else
 						printf("B lost by %d SLs\n\n", bSL-aSL);
 				}
+			hitsRemaining--;
 		}
 
 	if (attacker == 0)
