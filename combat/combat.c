@@ -53,6 +53,8 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	int hitsRemaining = 0;
 	int attackers = 0;
 	int defenders = 0;
+	char *oldRatio;
+	char *newRatio;
 	int *aRolls = calloc(aSize,sizeof(int));
 	int *bRolls = calloc(bSize,sizeof(int));
 	int aSL = 0;
@@ -62,7 +64,6 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	int bCrits = 0;
 	int aFumbls = 0;
 	int bFumbls = 0;
-	
 	if (aSize > bSize)
 		{
 			smallest = bSize;
@@ -79,6 +80,7 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			printf("A is attacking B!\n");
 			hitsRemaining = teamA->units;
 			defenders = teamB->units;
+
 		}
 	else
 		{
@@ -86,7 +88,10 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			hitsRemaining = teamB->units;
 			defenders = teamB->units;
 		}
-	attackers = hitsRemaining;
+	attackers = hitsRemaining;	
+	oldRatio = findRatio(attackers, defenders);
+
+	
 	while ((hitsRemaining != 0) && defenders >0)
 		{
 			aRolls[i] = getRandInt(100);
@@ -121,13 +126,55 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			hitsRemaining--;
 		}
 
+	newRatio = findRatio(attackers, defenders);
 	if (attacker == 0)
-		printf("\nCOMBAT REPORT:\nTeam A killed %d enemy unit(s)\n", killed);
+		{
+			printf("\nCOMBAT REPORT:\nCombat Ratio at Start: %s\nCombat Ratio at End: %s\n Team A to Team B\nTeam A killed %d enemy unit(s)\n",oldRatio, newRatio, killed);
+		}
 	else
 		printf("\nCOMBAT REPORT:\nTeam B killed %d enemy unit(s)\n", killed);
 
 	killed = 0;
 }
+
+
+/*
+	Find a proper reduced ratio of x/y
+ */
+char* findRatio(int divident, int divisor)
+{
+	int maxSize = 0;
+	int minSize = 0;
+	char *output = malloc(sizeof(char)*100);
+	
+	if (divident > divisor)
+		{
+			maxSize = divident;
+			minSize = divisor;
+		}
+	else
+		{
+			maxSize = divisor;
+			minSize = divident;
+		}
+
+	int i = 0;
+	int gcd = 0;
+	
+	for (i = 1; i < minSize+1; i++)
+		{
+			if(divident % i == 0 && divisor % i == 0)
+				gcd = i;
+		}
+	
+	if (gcd != 0)
+		sprintf(output, "%d to %d", divident/gcd, divisor/gcd);
+	else
+		sprintf(output, "%d to %d", divident, divisor);
+
+	return output;
+}
+
 
 
 /*
