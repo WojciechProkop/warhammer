@@ -24,6 +24,9 @@ int main(int argc, char **argv)
 {
 	struct stats teamA;
 	struct stats teamB;
+	struct options optsList;
+	//	optsList.options = calloc(3, sizeof(char) * 100);
+	
 	int attacker = 0;
 
 	// Set the stats of both teams to equal 0, so there is no undefined behaviour
@@ -117,10 +120,16 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			oldRatio = findRatio(attackers, defenders);
 
 			int combatBonus = 0;
-			if (atoi(oldRatio) >= 3)
-				combatBonus += 40;
-			else if (atoi(oldRatio) >= 2)
-				combatBonus += 20;
+			if(attackers/defenders >= 3)
+				{
+					printf("Combat ratio in decimal: %d\n", atoi(oldRatio));
+					combatBonus += 40;
+				}
+			else if (attackers/defenders >= 2)
+				{
+					printf("Combat ratio in decimal: %d\n", atoi(oldRatio));
+					combatBonus += 20;
+				}
 			else
 				combatBonus = 0;
 
@@ -167,6 +176,7 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 								printf("B lost by %d SLs\n\n", bSL-aSL);
 						}
 					hitsRemaining--;
+					combatBonus = 0;
 				} while ((hitsRemaining != 0) && defenders >0);
 			
 			newRatio = findRatio(attackers, defenders);
