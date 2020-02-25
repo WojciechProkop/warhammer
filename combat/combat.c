@@ -115,14 +115,33 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			
 			attackers = hitsRemaining;	
 			oldRatio = findRatio(attackers, defenders);
-			
-			while ((hitsRemaining != 0) && defenders >0)
+
+			int combatBonus = 0;
+			if (atoi(oldRatio) >= 3)
+				combatBonus += 40;
+			else if (atoi(oldRatio) >= 2)
+				combatBonus += 20;
+			else
+				combatBonus = 0;
+
+			printf("CombatBonus: %d\n", combatBonus);
+		  do
 				{
 					aRolls[i] = getRandInt(100);
 					bRolls[i] = getRandInt(100);
+
+					if (attacker == 0)
+						{
+							aSL = ((teamA->WS+combatBonus) - aRolls[i]) / 10;
+							bSL = (teamB->WS - bRolls[i]) / 10;
+						}
+					else
+						{
+							aSL = (teamA->WS -aRolls[i]) / 10;
+							bSL = ((teamB->WS+combatBonus) - bRolls[i]) / 10;
+						}
+
 					
-					aSL = (teamA->WS - aRolls[i]) / 10;
-					bSL = (teamB->WS - bRolls[i]) / 10;
 					printf("Roll of a: %d  SL of a: %d\n", aRolls[i], aSL);
 					printf("Roll of b: %d  SL of b: %d\n", bRolls[i], bSL);
 					if (attacker == 0)
@@ -148,7 +167,7 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 								printf("B lost by %d SLs\n\n", bSL-aSL);
 						}
 					hitsRemaining--;
-				}
+				} while ((hitsRemaining != 0) && defenders >0);
 			
 			newRatio = findRatio(attackers, defenders);
 			if (attacker == 0)
@@ -170,11 +189,11 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 					attacker = 0;
 				}
 			killed = 0;
-
+			combatBonus = 0;
 			oldRatio = NULL;
 			newRatio = NULL;
 			sleep(1);
-		}
+			 }
 
 		 // Free memory
 		 free(oldRatio);
@@ -221,9 +240,9 @@ char* findRatio(int divident, int divisor)
 		}
 	
 	if (gcd != 0 && minSize > 1)
-		sprintf(output, "%d to %d", divident/gcd, divisor/gcd);
+		sprintf(output, "%d/%d", divident/gcd, divisor/gcd);
 	else
-		sprintf(output, "%d to %d", divident, divisor);
+		sprintf(output, "%d/%d", divident, divisor);
 
 	return output;
 }
@@ -253,6 +272,9 @@ char* findRatio(int divident, int divisor)
 
 	Neutral flags:
 	q -- who is attacking. q = 0 A attacks B; q = 1 B attacks A
+	Q -- simulation mode. Q = 0 means run one round of combat. Q = 1 means run until
+	     one side runs out of combatants
+
  */
 int getOptions(int argc, char **argv, struct stats *teamA, struct stats *teamB)
 {

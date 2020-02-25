@@ -1,4 +1,6 @@
-
+struct options{
+	char * optsList;
+};
 
 struct stats{
 	int WS, BS, S, T, I,
