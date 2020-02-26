@@ -12,7 +12,7 @@
 	
 	Program function: To simulate a round of combat in Warhammer Fantasy Role-Play (4th Ed.)
 	using a computer. The aim is to be as comprehensive as possible.
- */
+*/
 
 
 // Example run:
@@ -65,7 +65,7 @@ int getRandInt(int limit)
 
 	PLEASE DO NOT PUT THIS FUNCTION IN A LOOP UNLESS YOU WANT TO GET A STACK
 	OVERFLOW!
- */
+*/
 void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 {
 	//seed the time
@@ -89,11 +89,11 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 	int bCrits = 0;
 	int aFumbls = 0;
 	int bFumbls = 0;
-	   while (teamA->units > 0 && teamB->units > 0)
-			 {
+	while (teamA->units > 0 && teamB->units > 0)
+		{
 				 
-				 if (aSize > bSize)
-					 {
+			if (aSize > bSize)
+				{
 					smallest = bSize;
 					difference = aSize-bSize;
 				}
@@ -203,26 +203,26 @@ void fightCombat(struct stats *teamA, struct stats *teamB, int attacker)
 			oldRatio = NULL;
 			newRatio = NULL;
 			sleep(1);
-			 }
+		}
 
-		 // Free memory
-		 free(oldRatio);
-		 free(newRatio);
-		 free(aRolls);
-		 free(bRolls);
+	// Free memory
+	free(oldRatio);
+	free(newRatio);
+	free(aRolls);
+	free(bRolls);
 
-		 // Declare winner
-		 if (attacker == 0)
-			 printf("TEAM B HAS WON THE COMBAT!\n");
-		 else
-			 printf("TEAM A HAS WON THE COMBAT!\n");
+	// Declare winner
+	if (attacker == 0)
+		printf("TEAM B HAS WON THE COMBAT!\n");
+	else
+		printf("TEAM A HAS WON THE COMBAT!\n");
 		 
 }
 
 
 /*
 	Find a proper reduced ratio of x/y
- */
+*/
 char* findRatio(int divident, int divisor)
 {
 	int maxSize = 0;
@@ -275,100 +275,100 @@ char* findRatio(int divident, int divisor)
 	f - fellowship
 	u - units // how many soldiers there are on this team
 	h - custom wounds amount. If nothing is entered, default calculation for
-	    medium sized creature will be used (SB+WPB+TB*2)
-			Strength Bonus + Willpower Bonus + 2*Toughness Bonus
+	medium sized creature will be used (SB+WPB+TB*2)
+	Strength Bonus + Willpower Bonus + 2*Toughness Bonus
 
 	The numbers can be any size
 
 	Neutral flags:
 	q -- who is attacking. q = 0 A attacks B; q = 1 B attacks A
 	Q -- simulation mode. Q = 0 means run one round of combat. Q = 1 means run until
-	     one side runs out of combatants
+	one side runs out of combatants
 
- */
+*/
 int getOptions(int argc, char **argv, struct stats *teamA, struct stats *teamB)
 {
-	 int c = 0;
-	 int qValue = 0;
+	int c = 0;
+	int qValue = 0;
 	 
-	 while ((c = getopt (argc, argv, ":w:b:s:t:n:a:d:i:p:f:u:h:W:B:S:T:N:A:D:I:P:F:U:H:q:")) != -1)
-		 switch (c)
-			 {
-			 case 'w':
-				 teamA->WS = atoi(optarg);
-				 break;
-			 case 'b':
-				 teamA->BS  = atoi(optarg);
-				 break;
-			 case 's':
-				 teamA->S = atoi(optarg);
-				 break;
-			 case 't':
-         teamA->T = atoi(optarg);
-         break;
-			 case 'n':
-				 teamA->I = atoi(optarg);
-				 break;
-       case 'a':
-				 teamA->Agi = atoi(optarg);
-         break;
-			 case 'd':
-				 teamA->Dex = atoi(optarg);
-         break;
-       case 'i':
-				 teamA->Int  = atoi(optarg);
-         break;
-       case 'p':
-				 teamA->WP = atoi(optarg);
-         break;
-			 case 'f':
-				 teamA->Fel = atoi(optarg);
-         break;
-			 case 'u':
-         teamA->units = atoi(optarg);
-         break;
-       case 'h':
-         teamA->W = atoi(optarg);
-         break;
-       case 'W':
-				 teamB->WS  = atoi(optarg);
-         break;
-       case 'B':
-				 teamB->BS = atoi(optarg);
-         break;
-       case 'S':
-				 teamB->S = atoi(optarg);
-         break;
-       case 'T':
-				 teamB->T  = atoi(optarg);
-         break;
-       case 'N':
-				 teamB->I = atoi(optarg);
-         break;
-			 case 'A':
-				 teamB->Agi = atoi(optarg);
-         break;
-       case 'D':
-				 teamB->Dex  = atoi(optarg);
-         break;
-       case 'I':
-				 teamB->Int = atoi(optarg);
-         break;
-			 case 'P':
-				 teamB->WP  = atoi(optarg);
-         break;
-       case 'F':
-				 teamB->Fel = atoi(optarg);
-         break;
-			 case 'U':
-         teamB->units = atoi(optarg);
-         break;
-       case 'H':
-         teamB->W = atoi(optarg);
-				 break;
-			 case 'q':
-				 qValue = atoi(optarg);
-				 break;
-			 }
-	 return qValue;
+	while ((c = getopt (argc, argv, ":w:b:s:t:n:a:d:i:p:f:u:h:W:B:S:T:N:A:D:I:P:F:U:H:q:")) != -1)
+		switch (c)
+			{
+			case 'w':
+				teamA->WS = atoi(optarg);
+				break;
+			case 'b':
+				teamA->BS  = atoi(optarg);
+				break;
+			case 's':
+				teamA->S = atoi(optarg);
+				break;
+			case 't':
+				teamA->T = atoi(optarg);
+				break;
+			case 'n':
+				teamA->I = atoi(optarg);
+				break;
+			case 'a':
+				teamA->Agi = atoi(optarg);
+				break;
+			case 'd':
+				teamA->Dex = atoi(optarg);
+				break;
+			case 'i':
+				teamA->Int  = atoi(optarg);
+				break;
+			case 'p':
+				teamA->WP = atoi(optarg);
+				break;
+			case 'f':
+				teamA->Fel = atoi(optarg);
+				break;
+			case 'u':
+				teamA->units = atoi(optarg);
+				break;
+			case 'h':
+				teamA->W = atoi(optarg);
+				break;
+			case 'W':
+				teamB->WS  = atoi(optarg);
+				break;
+			case 'B':
+				teamB->BS = atoi(optarg);
+				break;
+			case 'S':
+				teamB->S = atoi(optarg);
+				break;
+			case 'T':
+				teamB->T  = atoi(optarg);
+				break;
+			case 'N':
+				teamB->I = atoi(optarg);
+				break;
+			case 'A':
+				teamB->Agi = atoi(optarg);
+				break;
+			case 'D':
+				teamB->Dex  = atoi(optarg);
+				break;
+			case 'I':
+				teamB->Int = atoi(optarg);
+				break;
+			case 'P':
+				teamB->WP  = atoi(optarg);
+				break;
+			case 'F':
+				teamB->Fel = atoi(optarg);
+				break;
+			case 'U':
+				teamB->units = atoi(optarg);
+				break;
+			case 'H':
+				teamB->W = atoi(optarg);
+				break;
+			case 'q':
+				qValue = atoi(optarg);
+				break;
+			}
+	return qValue;
 }
