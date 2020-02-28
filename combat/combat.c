@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 {
 	struct stats teamA;
 	struct stats teamB;
-	struct options optsList;
-	//	optsList.options = calloc(3, sizeof(char) * 100);
+	struct options opts;
+	opts.optsList = calloc(3, sizeof(char) * 2);
 	
 	int attacker = 0;
 
