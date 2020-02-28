@@ -7,7 +7,7 @@
 #include "combat.h"
 
 /*
-	Author: Wojciech Prokop
+	Author: Wojciech  Prokop
 	prokopw@mymacewan.ca or wojtek678@hotmail.com
 	
 	Program function: To simulate a round of combat in Warhammer Fantasy Role-Play (4th Ed.)
